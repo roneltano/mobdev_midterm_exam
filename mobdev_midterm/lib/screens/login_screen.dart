@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:get_it/get_it.dart';
 import '../services/api_service.dart';
 import 'home.dart';
 
@@ -12,6 +12,9 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordCtrl = TextEditingController(
     text: '83r5^_',
   );
+
+  
+  ApiService get service => GetIt.I<ApiService>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +51,13 @@ class LoginScreen extends StatelessWidget {
               height: 60,
               child: ElevatedButton(
                 onPressed: () async {
-                  final getToken = await login(
+                  final getToken = await service.login(
                     nameCtrl.text,
                     passwordCtrl.text,
                   );
 
                   if (getToken != null && getToken['token'] != null) {
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Successfully logged in'),
@@ -70,6 +74,7 @@ class LoginScreen extends StatelessWidget {
                       ),
                     );
                   } else {
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Incorrect username or password'),
